@@ -1,0 +1,35 @@
+strategy_id: "cd-ring-incident-rm-vms-001"
+version: "0.1.0"
+scope:
+  roadchain_id: "rc-cd-ring-ne"
+  segments: ["cd-ne-201", "cd-ne-202"]
+  ramps: ["ramp-ne-201-in", "ramp-ne-202-in"]
+  vms: ["vms-ne-201-main", "vms-ne-150-bypass"]
+actions:
+  - type: "ramp_metering"
+    ramp_id: "ramp-ne-201-in"
+    veh_per_hour: 400
+  - type: "ramp_metering"
+    ramp_id: "ramp-ne-202-in"
+    veh_per_hour: 300
+  - type: "ramp_closure"
+    ramp_id: "ramp-ne-202-in"
+    max_duration_s: 600
+  - type: "vms_message"
+    vms_id: "vms-ne-201-main"
+    text: "前方事故，减速慢行，请勿占用应急车道"
+  - type: "vms_message"
+    vms_id: "vms-ne-150-bypass"
+    text: "前方绕城缓行，建议经XX绕行"
+guardrails:
+  min_vsl: 60
+  max_vsl: 100
+  max_delta: 20
+  max_closure_s: 900
+  always_keep_emergency_lane_free: true
+rollout:
+  mode: "immediate"
+  max_revert_time_s: 600
+metadata:
+  author: "tmc-chengdu"
+  source: "runbook-template"

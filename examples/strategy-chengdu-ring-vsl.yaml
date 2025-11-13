@@ -1,0 +1,30 @@
+strategy_id: "cd-ring-vsl-ampeak-001"
+version: "0.1.0"
+scope:
+  roadchain_id: "rc-cd-ring-se"
+  segments: ["cd-se-101", "cd-se-102", "cd-se-103", "cd-se-104"]
+actions:
+  - type: "vsl"
+    segment_id: "cd-se-101"
+    value: 80
+  - type: "vsl"
+    segment_id: "cd-se-102"
+    value: 80
+  - type: "vsl"
+    segment_id: "cd-se-103"
+    value: 70
+  - type: "vsl"
+    segment_id: "cd-se-104"
+    value: 70
+guardrails:
+  min_vsl: 60
+  max_vsl: 100
+  max_delta: 20
+  max_changes_per_5min: 2
+  always_keep_emergency_lane_free: true
+rollout:
+  mode: "canary"
+  max_revert_time_s: 600
+metadata:
+  author: "ops-chengdu"
+  source: "ui-form"

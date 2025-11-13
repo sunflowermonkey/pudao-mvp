@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pudao-pfsb-formal-mvp"
+version = "0.1.0"
+description = "Pudao PFSB Formal Lane MVP (SMT/Z3) — strategy DSL formal verification"
+authors = [{ name = "Pudao Team" }]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "z3-solver>=4.12,<5",
+  "pydantic>=1.10,<2",
+  "PyYAML>=6",
+  "jsonschema>=4",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7",
+]
+
+[project.scripts]
+pudao = "pudao.cli.pudao_cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pudao*"]
