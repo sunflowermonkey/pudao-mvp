@@ -7,6 +7,7 @@ from typing import Dict, Any
 from pudao.dsl.parser import load_strategy_ir
 from pudao.smt.solver import check_formal_with_smt
 from pudao.evidence.evidence import append_formal_timing
+from pudao.hints.suggester import make_hints_payload
 
 
 def _iso_utc() -> str:
@@ -50,9 +51,13 @@ def check_formal_file(path: str) -> Dict[str, Any]:
                 "report_ms": 0.0
             },
         }
-
+        
         # 写入 evidence
         append_formal_timing(path, failure_payload)
+
+        # 插入UNSAT 提示
+        failure_payload["hints"] = make_hints_payload(failure_payload, ir=None)
+
         return failure_payload
 
     # ---- 进入 Formal（含不变式 + SMT）----
@@ -87,9 +92,12 @@ def check_formal_file(path: str) -> Dict[str, Any]:
         "report_ms": report_ms,
         "total_ms": total_ms,
     }
+    if merged.get("status") == "unsat":
+        merged["hints"] = make_hints_payload(merged,ir=None)
 
     # 写入 evidence
     append_formal_timing(path, merged)
+
     return merged
 
 
